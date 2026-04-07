@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificar Código - EIA Hub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div style="max-width: 400px; margin: 50px auto; text-align: center; font-family: sans-serif;">
+        <h2>Ingresa tu Código</h2>
+        <p>Enviamos un código de 6 dígitos a: <br><strong>{{ email }}</strong></p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div style="color: {% if category == 'error' %}red{% else %}green{% endif %}; margin-bottom: 15px;">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('auth.verify') }}">
+            <div style="margin-bottom: 20px;">
+                <input type="text" id="codigo" name="codigo" required maxlength="6" pattern="\d{6}" 
+                       placeholder="123456" 
+                       style="text-align: center; font-size: 32px; letter-spacing: 10px; width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
+            </div>
+            <button type="submit" style="padding: 12px 24px; background-color: #003087; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; width: 100%;">
+                Verificar y Entrar
+            </button>
+        </form>
+        
+        <p style="margin-top: 20px;">
+            <a href="{{ url_for('auth.login') }}" style="color: #666; text-decoration: none;">Cambiar correo</a>
+        </p>
+    </div>
+</body>
+</html>

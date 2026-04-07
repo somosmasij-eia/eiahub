@@ -1,0 +1,215 @@
+/* ============================================================
+   EIA Hub — CSS
+   ============================================================ */
+
+:root {
+    --teal:      #00b3a0;
+    --teal-dark: #007e70;
+    --blue:      #1a3a6b;
+    --white:     #ffffff;
+    --bg:        #f4f7f9;
+    --dark:      #1e2a30;
+    --gray:      #888888;
+    --border:    #e5e9ec;
+    --r:         8px;
+    --shadow:    0 2px 8px rgba(0,0,0,0.08);
+    --font:      'Sora', sans-serif;
+    --mono:      'Space Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
+body { font-family: var(--font); background: var(--bg); color: var(--dark); -webkit-font-smoothing: antialiased; }
+a { text-decoration: none; color: inherit; }
+button { font-family: var(--font); cursor: pointer; }
+
+/* ── FLASH ── */
+.flash {
+    padding: 0.75rem 1.25rem;
+    margin: 0.5rem 1rem;
+    border-radius: var(--r);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+.flash-success { background: #dcfce7; color: #166534; border-left: 3px solid #22c55e; }
+.flash-error   { background: #fee2e2; color: #991b1b; border-left: 3px solid #ef4444; }
+
+/* ── NAVBAR ── */
+.navbar {
+    background: var(--white);
+    height: 56px;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.nav-logo { font-family: var(--mono); font-size: 1.1rem; font-weight: 700; color: var(--blue); }
+.nav-logo span { color: var(--teal); }
+.nav-right { display: flex; align-items: center; gap: 0.75rem; }
+.nav-user { font-size: 0.8rem; font-weight: 600; color: var(--gray); }
+.btn-salir {
+    font-size: 0.75rem; font-weight: 600; color: var(--teal);
+    border: 1.5px solid var(--teal); border-radius: var(--r);
+    padding: 0.3rem 0.85rem; background: none;
+    transition: background 0.2s, color 0.2s;
+}
+.btn-salir:hover { background: var(--teal); color: var(--white); }
+
+/* ── PAGE BODY ── */
+.page-body { padding: 1.5rem; max-width: 600px; margin: 0 auto; }
+.page-header { margin-bottom: 1.5rem; }
+.back-btn {
+    display: inline-block; font-size: 0.85rem; font-weight: 600;
+    color: var(--teal); margin-bottom: 0.5rem;
+}
+.page-header h1 { font-size: 1.4rem; font-weight: 700; color: var(--blue); }
+
+/* ── LOGIN ── */
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(160deg, #007e70 0%, #003f5a 55%, #0a1a30 100%);
+}
+.login-bg { position: fixed; inset: 0; z-index: -1; background: linear-gradient(160deg, #007e70 0%, #003f5a 55%, #0a1a30 100%); }
+.login-top { padding: 3rem 1.75rem 0; }
+.login-badge {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.75);
+    font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase;
+    padding: 0.3rem 0.85rem; border-radius: 4px;
+    font-family: var(--mono);
+}
+.login-hero { flex: 1; padding: 0 1.75rem; display: flex; flex-direction: column; justify-content: center; }
+.logo-eia { font-family: var(--mono); font-size: 5rem; font-weight: 700; color: white; letter-spacing: -3px; line-height: 1; }
+.logo-hub { font-size: 1.4rem; font-weight: 300; color: var(--teal); letter-spacing: 6px; text-transform: uppercase; margin-top: 0.25rem; }
+.login-sub { color: rgba(255,255,255,0.4); font-size: 0.875rem; margin-top: 0.75rem; }
+.login-bottom {
+    padding: 1.5rem 1.75rem 2.5rem;
+    background: rgba(0,0,0,0.25);
+    border-top: 1px solid rgba(255,255,255,0.07);
+    display: flex; flex-direction: column; gap: 0.75rem;
+}
+.btn-ms {
+    display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+    background: white; color: var(--dark);
+    font-weight: 600; font-size: 0.9rem;
+    padding: 0.9rem; border-radius: var(--r); border: none;
+    transition: opacity 0.2s;
+}
+.btn-ms:hover { opacity: 0.9; }
+.btn-local {
+    background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.3);
+    font-size: 0.875rem; padding: 0.85rem;
+    border-radius: var(--r); border: 1px solid rgba(255,255,255,0.1);
+    cursor: not-allowed;
+}
+.login-note { text-align: center; font-size: 0.68rem; color: rgba(255,255,255,0.25); font-family: var(--mono); }
+
+/* ── DASHBOARD ── */
+.greeting { font-size: 1.5rem; font-weight: 400; margin-bottom: 0.2rem; }
+.greeting strong { color: var(--blue); }
+.greeting-sub { font-size: 0.85rem; color: var(--gray); margin-bottom: 1.5rem; }
+.cards { display: flex; flex-direction: column; gap: 0.75rem; }
+.card {
+    background: var(--white); border-radius: var(--r);
+    padding: 1rem 1.1rem; display: flex; align-items: center; gap: 1rem;
+    border: 1.5px solid var(--border); box-shadow: var(--shadow);
+    transition: border-color 0.15s, transform 0.15s;
+}
+.card:hover { border-color: var(--teal); transform: translateX(3px); }
+.card-disabled { opacity: 0.45; cursor: default; }
+.card-disabled:hover { border-color: var(--border); transform: none; }
+.card-icon {
+    width: 42px; height: 42px; font-size: 1.3rem;
+    background: rgba(0,179,160,0.08); border-radius: var(--r);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.card-info { flex: 1; }
+.card-title { font-size: 0.9rem; font-weight: 700; color: var(--dark); }
+.card-desc  { font-size: 0.75rem; color: var(--gray); margin-top: 0.15rem; }
+.card-arrow { color: #ccc; font-size: 1.2rem; }
+
+/* ── EMPTY STATE ── */
+.empty-state {
+    text-align: center; padding: 4rem 2rem;
+    background: var(--white); border-radius: var(--r);
+    border: 2px dashed var(--border);
+}
+.empty-icon { font-size: 3rem; margin-bottom: 0.75rem; }
+.empty-state h2 { color: var(--blue); margin-bottom: 0.5rem; }
+.empty-state p  { color: var(--gray); font-size: 0.875rem; }
+
+/* ── MAP ── */
+#map { width: 100%; height: calc(100vh - 200px); min-height: 400px; border-radius: var(--r); }
+.map-placeholder {
+    height: 400px; background: #e5eef2;
+    border-radius: var(--r); display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 0.75rem;
+    color: var(--gray); font-size: 0.875rem; border: 1px dashed var(--border);
+}
+.map-placeholder span { font-size: 2.5rem; }
+.map-placeholder code { font-family: var(--mono); font-size: 0.75rem; background: white; padding: 0.3rem 0.6rem; border-radius: 4px; }
+
+/* ── TRANSPORTE ── */
+.btn-action {
+    display: block; width: 100%; text-align: center;
+    background: var(--teal); color: white;
+    font-weight: 600; font-size: 0.9rem;
+    padding: 0.9rem; border-radius: var(--r); border: none;
+    margin-bottom: 1.5rem;
+    transition: background 0.2s;
+}
+.btn-action:hover { background: var(--teal-dark); }
+.section-label {
+    font-family: var(--mono); font-size: 0.6rem; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--gray); margin-bottom: 0.75rem;
+}
+.route-list { display: flex; flex-direction: column; gap: 0.5rem; }
+.route-item {
+    background: var(--white); padding: 0.85rem 1rem;
+    border-radius: var(--r); border: 1px solid var(--border);
+    display: flex; align-items: center; gap: 0.75rem;
+    font-size: 0.875rem; font-weight: 500;
+}
+.route-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); flex-shrink: 0; }
+
+/* ── FORM ── */
+.form-card {
+    background: var(--white); border-radius: var(--r);
+    padding: 1.5rem; display: flex; flex-direction: column; gap: 1.1rem;
+    border: 1px solid var(--border);
+}
+.form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+.form-group label { font-size: 0.8rem; font-weight: 600; }
+.form-group select {
+    padding: 0.75rem; border-radius: var(--r);
+    border: 1.5px solid var(--border); font-family: var(--font);
+    font-size: 0.875rem; background: var(--bg); color: var(--dark);
+    transition: border-color 0.2s;
+}
+.form-group select:focus { outline: none; border-color: var(--teal); }
+.check-row {
+    display: flex; align-items: flex-start; gap: 0.6rem;
+    background: #e8f7f5; padding: 0.85rem; border-radius: var(--r);
+}
+.check-row input { accent-color: var(--teal); margin-top: 3px; flex-shrink: 0; }
+.check-row label { font-size: 0.8rem; line-height: 1.5; }
+.check-row a { color: var(--teal); font-weight: 600; }
+
+/* ── Estilos para suavizar los campos de texto ── */
+input:focus, select:focus {
+    outline: none !important; /* Quita la raya fea por defecto del navegador */
+    border: 2px solid #003087 !important; /* Le pone el azul de EIA Hub */
+    box-shadow: 0 0 8px rgba(0, 48, 135, 0.2); /* Un brillo suave y moderno */
+    transition: all 0.3s ease; /* Hace que el cambio de color sea suave */
+}
+
+input, select {
+    transition: all 0.3s ease;
+}

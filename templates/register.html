@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Registro — EIA Hub{% endblock %}
+{% block body_class %}login-page{% endblock %}
+{% block navbar %}{% endblock %}
+
+{% block content %}
+<div class="login-bg"></div>
+
+<div class="login-top">
+    <span class="login-badge">Universidad EIA</span>
+</div>
+
+<div class="login-hero">
+    <div class="logo-eia">EIA</div>
+    <div class="logo-hub">Hub</div>
+    <p class="login-sub">Crea tu cuenta</p>
+</div>
+
+<div class="login-bottom">
+    {% for category, message in get_flashed_messages(with_categories=true) %}
+        <div class="flash flash-{{ category }}">{{ message }}</div>
+    {% endfor %}
+
+    <form method="POST" action="{{ url_for('auth.register') }}">
+        <input
+            type="text"
+            name="nombre"
+            placeholder="Tu nombre completo"
+            required
+            class="input-email"
+        />
+        <input
+            type="email"
+            name="email"
+            placeholder="tu.correo@eia.edu.co"
+            required
+            class="input-email"
+        />
+        <button type="submit" class="btn-ms">
+            Crear cuenta
+        </button>
+    </form>
+
+    <p class="login-note">
+        ¿Ya tienes cuenta? <a href="{{ url_for('main.index') }}">Inicia sesión</a>
+    </p>
+    <p class="login-note">Solo correos @eia.edu.co</p>
+</div>
+{% endblock %}

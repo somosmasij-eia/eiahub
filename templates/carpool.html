@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}CarPool EIA — EIA Hub{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+{% endblock %}
+
+{% block content %}
+<div class="page-body">
+    <div class="page-header">
+        <a href="{{ url_for('main.dashboard') }}" class="back-btn">‹ Volver</a>
+        <h1>CarPool EIA</h1>
+    </div>
+
+    <div id="map" style="height: 420px; border-radius: 16px; overflow: hidden;"></div>
+
+    <div class="empty-state" style="margin-top: 1.5rem;">
+        <div class="empty-icon">🚗</div>
+        <h2>Próximamente</h2>
+        <p>Aquí podrás ver y unirte a viajes compartidos con compañeros de la EIA.</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    const map = L.map('map').setView([6.1867, -75.5849], 14);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 19,
+    }).addTo(map);
+
+    // Marcador Universidad EIA
+    L.marker([6.1867, -75.5849])
+        .addTo(map)
+        .bindPopup('<b>Universidad EIA</b><br>Envigado, Antioquia')
+        .openPopup();
+</script>
+{% endblock %}
