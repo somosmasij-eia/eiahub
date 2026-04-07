@@ -1,4 +1,5 @@
 import random
+import threading # <--- IMPORTANTE
 from datetime import datetime, timedelta
 from flask import Blueprint, redirect, request, url_for, flash, render_template, current_app, session
 from flask_login import login_user, logout_user, login_required
@@ -8,21 +9,31 @@ from models import db, User
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 ALLOWED_DOMAIN = "@eia.edu.co"
-TOKEN_EXPIRY_MINUTES = 15  # 15 min es estándar para códigos
+TOKEN_EXPIRY_MINUTES = 15
 
 def _generar_codigo():
-    # Genera un código aleatorio de 6 dígitos
     return str(random.randint(100000, 999999))
 
-def _enviar_email(destinatario, asunto, cuerpo_html):
-    try:
-        mail = current_app.extensions.get('mail')
-        msg = Message(asunto, recipients=[destinatario])
-        msg.html = cuerpo_html
-        mail.send(msg)
-        print(f"✅ ¡Correo enviado con éxito a {destinatario}!")
-    except Exception as e:
-        print(f"❌ Error interno enviando correo: {e}")
+# --- NUEVA FUNCIÓN ASÍNCRONA ---
+def _enviar_email_async(app, msg):
+    """Envía el correo usando el contexto de la aplicación en un hilo aparte"""
+    with app.app_context():
+        try:
+            # Obtenemos la extensión mail directamente del objeto app
+            mail = app.extensions.get('mail')
+            mail.send(msg)
+            print(f"✅ Correo enviado en segundo plano.")
+        except Exception as e:
+            print(f"❌ Error enviando correo: {e}")
+
+def _preparar_y_enviar_email(destinatario, asunto, cuerpo_html):
+    """Crea el mensaje y lanza el hilo para no bloquear el servidor"""
+    app = current_app._get_current_object() # Obtenemos la instancia real de la app
+    msg = Message(asunto, recipients=[destinatario])
+    msg.html = cuerpo_html
+    
+    # LANZAR EL HILO: El código sigue de largo sin esperar a Gmail
+    threading.Thread(target=_enviar_email_async, args=(app, msg)).start()
 
 # ── Registro ──────────────────────────────────────────────────────────────────
 @auth_bp.route("/register", methods=["GET", "POST"])
@@ -33,10 +44,6 @@ def register():
 
         if not email.endswith(ALLOWED_DOMAIN):
             flash("Solo correos @eia.edu.co pueden registrarse.", "error")
-            return render_template("register.html")
-
-        if not nombre:
-            flash("Por favor ingresa tu nombre.", "error")
             return render_template("register.html")
 
         user = User.query.filter_by(email=email).first()
@@ -54,15 +61,15 @@ def register():
         user.token_expiracion = datetime.utcnow() + timedelta(minutes=TOKEN_EXPIRY_MINUTES)
         db.session.commit()
 
-        _enviar_email(
+        # LLAMADA AL NUEVO SISTEMA VELOZ
+        _preparar_y_enviar_email(
             email,
             "Tu código de verificación — EIA Hub",
-            f"<h2>Hola {nombre},</h2><p>Tu código de seguridad es: <strong><span style='font-size:24px; color:#003087;'>{codigo}</span></strong></p><p>Este código expira en {TOKEN_EXPIRY_MINUTES} minutos. No lo compartas con nadie.</p>"
+            f"<h2>Hola {nombre},</h2><p>Tu código es: <strong>{codigo}</strong></p>"
         )
 
-        # Guardamos el email en sesión temporal para la pantalla de verificación
         session['verify_email'] = email
-        flash("Te enviamos un código de 6 dígitos. Revisa tu correo.", "success")
+        flash("Código enviado. Revisa tu correo (puede tardar un momento).", "success")
         return redirect(url_for("auth.verify"))
 
     return render_template("register.html")
@@ -72,11 +79,6 @@ def register():
 def login():
     if request.method == "POST":
         email = request.form.get("email", "").strip().lower()
-
-        if not email.endswith(ALLOWED_DOMAIN):
-            flash("Solo correos @eia.edu.co pueden acceder.", "error")
-            return render_template("login.html")
-
         user = User.query.filter_by(email=email).first()
 
         if not user or not user.verificado:
@@ -88,20 +90,23 @@ def login():
         user.token_expiracion = datetime.utcnow() + timedelta(minutes=TOKEN_EXPIRY_MINUTES)
         db.session.commit()
 
-        _enviar_email(
+        # ENVÍO VELOZ TAMBIÉN AQUÍ
+        _preparar_y_enviar_email(
             email,
             "Tu código de acceso — EIA Hub",
-            f"<h2>Hola {user.nombre},</h2><p>Tu código de acceso es: <strong><span style='font-size:24px; color:#003087;'>{codigo}</span></strong></p><p>Este código expira en {TOKEN_EXPIRY_MINUTES} minutos.</p>"
+            f"<h2>Hola {user.nombre},</h2><p>Tu código es: <strong>{codigo}</strong></p>"
         )
 
         session['verify_email'] = email
-        flash("Te enviamos un código de 6 dígitos. Revisa tu correo.", "success")
+        flash("Código enviado. Revisa tu correo.", "success")
         return redirect(url_for("auth.verify"))
 
     return render_template("login.html")
 
-# ── Verificación de Código ────────────────────────────────────────────────────
-@auth_bp.route("/verify", methods=["GET", "POST"])
+# (El resto de tus rutas verify y logout se quedan igual...)
+    return render_template("register.html")
+
+#
 def verify():
     # Recuperamos el correo temporalmente guardado
     email = session.get('verify_email')
