@@ -14,14 +14,15 @@ TOKEN_EXPIRY_MINUTES = 15
 def _generar_codigo():
     return str(random.randint(100000, 999999))
 
+
 def _enviar_email_async(app, msg):
     with app.app_context():
         try:
             mail = app.extensions.get('mail')
             mail.send(msg)
-            print("✅ Correo enviado con éxito")
+            print(f"✅ Correo enviado a {msg.recipients}")
         except Exception as e:
-            print(f"❌ Error enviando correo: {e}")
+            print(f"❌ Error enviando correo: {type(e).__name__}: {e}")
 
 def _preparar_y_enviar_email(destinatario, asunto, cuerpo_html):
     app = current_app._get_current_object()
