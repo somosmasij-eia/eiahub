@@ -14,21 +14,14 @@ TOKEN_EXPIRY_MINUTES = 15
 def _generar_codigo():
     return str(random.randint(100000, 999999))
 
-
 def _enviar_email_async(app, msg):
     with app.app_context():
         try:
             mail = app.extensions.get('mail')
             mail.send(msg)
-<<<<<<< Updated upstream
             print(f"✅ Correo enviado a {msg.recipients}")
         except Exception as e:
             print(f"❌ Error enviando correo: {type(e).__name__}: {e}")
-=======
-            app.logger.info("Correo enviado con éxito a %s", msg.recipients)
-        except Exception as e:
-            app.logger.error("Error enviando correo: %s", e, exc_info=True)
->>>>>>> Stashed changes
 
 def _preparar_y_enviar_email(destinatario, asunto, cuerpo_html):
     app = current_app._get_current_object()
@@ -63,13 +56,20 @@ def register():
 
         _preparar_y_enviar_email(
             email,
-            "Tu código de verificación — EIA Hub",
-            f"<h2>Hola {nombre},</h2><p>Tu código es: <strong>{codigo}</strong></p>"
+            "Tu código de verificación — EIA Striges",
+            f"""
+            <div style="font-family:sans-serif;max-width:400px;margin:auto;background:#0a0e1a;color:white;padding:2rem;border-radius:12px;">
+              <h2 style="color:#7f77dd;">EIA Striges</h2>
+              <p>Hola {nombre}, bienvenido/a!</p>
+              <p>Tu código de verificación es:</p>
+              <div style="font-size:36px;font-weight:bold;letter-spacing:12px;color:#afa9ec;margin:1rem 0;">{codigo}</div>
+              <p style="color:rgba(255,255,255,0.5);font-size:12px;">Expira en {TOKEN_EXPIRY_MINUTES} minutos.</p>
+            </div>
+            """
         )
 
         session['verify_email'] = email
         flash("Código enviado. Revisa tu correo.", "success")
-        # --- AQUÍ ESTABA EL ERROR: ESTA RUTA DEBE EXISTIR ABAJO ---
         return redirect(url_for("auth.verify"))
 
     return render_template("register.html")
@@ -92,8 +92,16 @@ def login():
 
         _preparar_y_enviar_email(
             email,
-            "Tu código de acceso — EIA Hub",
-            f"<h2>Hola {user.nombre},</h2><p>Tu código es: <strong>{codigo}</strong></p>"
+            "Tu código de acceso — EIA Striges",
+            f"""
+            <div style="font-family:sans-serif;max-width:400px;margin:auto;background:#0a0e1a;color:white;padding:2rem;border-radius:12px;">
+              <h2 style="color:#7f77dd;">EIA Striges</h2>
+              <p>Hola {user.nombre}!</p>
+              <p>Tu código de acceso es:</p>
+              <div style="font-size:36px;font-weight:bold;letter-spacing:12px;color:#afa9ec;margin:1rem 0;">{codigo}</div>
+              <p style="color:rgba(255,255,255,0.5);font-size:12px;">Expira en {TOKEN_EXPIRY_MINUTES} minutos.</p>
+            </div>
+            """
         )
 
         session['verify_email'] = email
@@ -101,7 +109,7 @@ def login():
 
     return render_template("login.html")
 
-# ── Verificación (ESTO ES LO QUE FALTABA) ──────────────────────────────────────
+# ── Verificación ──────────────────────────────────────────────────────────────
 @auth_bp.route("/verify", methods=["GET", "POST"])
 def verify():
     email = session.get('verify_email')
@@ -123,7 +131,7 @@ def verify():
 
         login_user(user)
         session.pop('verify_email', None)
-        return redirect(url_for("main.dashboard")) 
+        return redirect(url_for("main.dashboard"))
 
     return render_template("verify.html", email=email)
 
