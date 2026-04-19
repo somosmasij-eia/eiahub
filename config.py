@@ -17,11 +17,11 @@ class Config:
     MAIL_USE_TLS  = False         # <--- CAMBIO: Desactivamos TLS
     MAIL_USE_SSL  = True          # <--- CAMBIO: Activamos SSL
     
-    MAIL_USERNAME = os.environ.get("MAIL_USERNAME", "")
-    MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD", "") # Usa la "Contraseña de Aplicación"
+    MAIL_USERNAME = os.environ.get("MAIL_USERNAME", "").strip()
+    MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD", "").replace(" ", "")  # Usa la "Contraseña de Aplicación"
     
     # Esto ayuda a que los correos no lleguen a Spam
-    MAIL_DEFAULT_SENDER = ("EIA Hub", os.environ.get("MAIL_USERNAME", ""))
+    MAIL_DEFAULT_SENDER = ("EIA Hub", MAIL_USERNAME)
 
     # --- Dominio Institucional ---
     ALLOWED_DOMAIN = "@eia.edu.co"

@@ -20,9 +20,15 @@ def _enviar_email_async(app, msg):
         try:
             mail = app.extensions.get('mail')
             mail.send(msg)
+<<<<<<< Updated upstream
             print(f"✅ Correo enviado a {msg.recipients}")
         except Exception as e:
             print(f"❌ Error enviando correo: {type(e).__name__}: {e}")
+=======
+            app.logger.info("Correo enviado con éxito a %s", msg.recipients)
+        except Exception as e:
+            app.logger.error("Error enviando correo: %s", e, exc_info=True)
+>>>>>>> Stashed changes
 
 def _preparar_y_enviar_email(destinatario, asunto, cuerpo_html):
     app = current_app._get_current_object()

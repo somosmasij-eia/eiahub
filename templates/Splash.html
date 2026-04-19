@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EIA Striges</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+</head>
+<body>
+<div class="splash-page" id="splash">
+  <div class="splash-stars" id="splashStars"></div>
+  <div class="splash-bg-owls" id="splashBgOwls"></div>
+ 
+  <div class="splash-content">
+    <div class="splash-owl-wrap">
+      <svg width="110" height="130" viewBox="0 0 120 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="60" cy="95" rx="38" ry="42" fill="#1a1f3a" stroke="#534ab7" stroke-width="1.5"/>
+        <path d="M22 80 Q15 95 22 115 Q35 105 38 90" fill="#13172e" stroke="#534ab7" stroke-width="0.8"/>
+        <path d="M98 80 Q105 95 98 115 Q85 105 82 90" fill="#13172e" stroke="#534ab7" stroke-width="0.8"/>
+        <ellipse cx="60" cy="105" rx="22" ry="26" fill="#13172e"/>
+        <path d="M42 90 Q60 85 78 90 Q70 100 60 103 Q50 100 42 90Z" fill="#1e2444"/>
+        <path d="M44 100 Q60 95 76 100 Q68 110 60 113 Q52 110 44 100Z" fill="#252a52"/>
+        <ellipse cx="60" cy="55" rx="30" ry="28" fill="#1a1f3a" stroke="#534ab7" stroke-width="1.5"/>
+        <path d="M38 32 L33 15 L42 28" fill="#1a1f3a" stroke="#534ab7" stroke-width="1.2"/>
+        <path d="M82 32 L87 15 L78 28" fill="#1a1f3a" stroke="#534ab7" stroke-width="1.2"/>
+        <ellipse cx="60" cy="57" rx="22" ry="20" fill="#13172e" stroke="#3c3489" stroke-width="1"/>
+        <g class="splash-owl-eyes">
+          <circle cx="48" cy="54" r="9" fill="#0a0e1a" stroke="#7f77dd" stroke-width="1.5"/>
+          <circle cx="48" cy="54" r="6" fill="#534ab7"/>
+          <circle cx="48" cy="54" r="3.5" fill="#0a0e1a"/>
+          <circle cx="50" cy="52" r="1.5" fill="white" opacity="0.9"/>
+          <circle cx="72" cy="54" r="9" fill="#0a0e1a" stroke="#7f77dd" stroke-width="1.5"/>
+          <circle cx="72" cy="54" r="6" fill="#534ab7"/>
+          <circle cx="72" cy="54" r="3.5" fill="#0a0e1a"/>
+          <circle cx="74" cy="52" r="1.5" fill="white" opacity="0.9"/>
+        </g>
+        <path d="M55 63 L60 70 L65 63 Q60 60 55 63Z" fill="#afa9ec"/>
+        <path d="M46 134 L40 140 M46 134 L46 141 M46 134 L52 140" stroke="#534ab7" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M74 134 L68 140 M74 134 L74 141 M74 134 L80 140" stroke="#534ab7" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+ 
+    <div class="splash-brand">
+      <div class="splash-brand-name">EIA <span>Striges</span></div>
+      <div class="splash-brand-sub">Universidad EIA</div>
+    </div>
+ 
+    <div class="splash-loader">
+      <div class="splash-loader-bar"></div>
+    </div>
+  </div>
+ 
+  <div class="splash-overlay"></div>
+</div>
+ 
+<script>
+  function makeOwlSVG(scale, opacity, stroke) {
+    return `<svg width="${120*scale}" height="${140*scale}" viewBox="0 0 120 140" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:${opacity}">
+      <ellipse cx="60" cy="95" rx="38" ry="42" fill="#1a1f3a" stroke="${stroke}" stroke-width="1.5"/>
+      <path d="M22 80 Q15 95 22 115 Q35 105 38 90" fill="#13172e" stroke="${stroke}" stroke-width="0.8"/>
+      <path d="M98 80 Q105 95 98 115 Q85 105 82 90" fill="#13172e" stroke="${stroke}" stroke-width="0.8"/>
+      <ellipse cx="60" cy="105" rx="22" ry="26" fill="#13172e"/>
+      <ellipse cx="60" cy="55" rx="30" ry="28" fill="#1a1f3a" stroke="${stroke}" stroke-width="1.5"/>
+      <path d="M38 32 L33 15 L42 28" fill="#1a1f3a" stroke="${stroke}" stroke-width="1.2"/>
+      <path d="M82 32 L87 15 L78 28" fill="#1a1f3a" stroke="${stroke}" stroke-width="1.2"/>
+      <ellipse cx="60" cy="57" rx="22" ry="20" fill="#13172e" stroke="${stroke}" stroke-width="1"/>
+      <circle cx="48" cy="54" r="9" fill="#0a0e1a" stroke="${stroke}" stroke-width="1.5"/>
+      <circle cx="48" cy="54" r="5" fill="${stroke}"/>
+      <circle cx="48" cy="54" r="3" fill="#0a0e1a"/>
+      <circle cx="72" cy="54" r="9" fill="#0a0e1a" stroke="${stroke}" stroke-width="1.5"/>
+      <circle cx="72" cy="54" r="5" fill="${stroke}"/>
+      <circle cx="72" cy="54" r="3" fill="#0a0e1a"/>
+      <path d="M55 63 L60 70 L65 63 Q60 60 55 63Z" fill="#afa9ec"/>
+    </svg>`;
+  }
+ 
+  const stars = document.getElementById('splashStars');
+  for (let i = 0; i < 55; i++) {
+    const s = document.createElement('div');
+    s.className = 'splash-star';
+    const size = Math.random() * 2 + 1;
+    s.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*3}s;animation-duration:${1.5+Math.random()*2}s;`;
+    stars.appendChild(s);
+  }
+ 
+  const bgOwls = document.getElementById('splashBgOwls');
+  const positions = [
+    { left:'3%',  top:'4%',  scale:0.55, opacity:0.55, delay:0.2, color:'#534ab7', dur:6 },
+    { left:'72%', top:'2%',  scale:0.45, opacity:0.45, delay:0.5, color:'#3c3489', dur:7 },
+    { left:'80%', top:'52%', scale:0.65, opacity:0.5,  delay:0.3, color:'#534ab7', dur:5 },
+    { left:'1%',  top:'55%', scale:0.5,  opacity:0.45, delay:0.7, color:'#3c3489', dur:8 },
+    { left:'55%', top:'78%', scale:0.4,  opacity:0.4,  delay:0.9, color:'#534ab7', dur:6 },
+    { left:'15%', top:'74%', scale:0.42, opacity:0.38, delay:0.6, color:'#3c3489', dur:7 },
+    { left:'40%', top:'6%',  scale:0.38, opacity:0.35, delay:1.1, color:'#534ab7', dur:9 },
+  ];
+ 
+  positions.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'splash-bg-owl';
+    div.style.cssText = `left:${p.left};top:${p.top};animation-delay:${p.delay}s, ${p.delay}s;animation-duration:1.2s, ${p.dur}s;`;
+    div.innerHTML = makeOwlSVG(p.scale, p.opacity, p.color);
+    bgOwls.appendChild(div);
+  });
+ 
+  setTimeout(() => {
+    window.location.href = "{{ url_for('main.index') }}";
+  }, 6500);
+</script>
+</body>
+</html>

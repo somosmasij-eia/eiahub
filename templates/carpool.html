@@ -1,41 +1,45 @@
 {% extends "base.html" %}
-{% block title %}CarPool EIA — EIA Hub{% endblock %}
-
+{% block title %}CarPool EIA — EIA Striges{% endblock %}
+ 
 {% block head %}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+  #map { height: 380px; border-radius: 12px; overflow: hidden; border: 1px solid rgba(83,74,183,0.2); }
+</style>
 {% endblock %}
-
+ 
 {% block content %}
 <div class="page-body">
-    <div class="page-header">
-        <a href="{{ url_for('main.dashboard') }}" class="back-btn">‹ Volver</a>
-        <h1>CarPool EIA</h1>
-    </div>
-
-    <div id="map" style="height: 420px; border-radius: 16px; overflow: hidden;"></div>
-
-    <div class="empty-state" style="margin-top: 1.5rem;">
-        <div class="empty-icon">🚗</div>
-        <h2>Próximamente</h2>
-        <p>Aquí podrás ver y unirte a viajes compartidos con compañeros de la EIA.</p>
-    </div>
+  <div class="page-header">
+    <a href="{{ url_for('main.dashboard') }}" class="back-btn">‹</a>
+    <h1>CarPool EIA</h1>
+  </div>
+ 
+  <div id="map"></div>
+ 
+  <div class="empty-state">
+    <div class="empty-icon">🚗</div>
+    <h2>Próximamente</h2>
+    <p>Aquí podrás ver y unirte a viajes compartidos con compañeros de la EIA.</p>
+  </div>
 </div>
 {% endblock %}
-
+ 
 {% block scripts %}
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    const map = L.map('map').setView([6.1867, -75.5849], 14);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        maxZoom: 19,
-    }).addTo(map);
-
-    // Marcador Universidad EIA
-    L.marker([6.1867, -75.5849])
-        .addTo(map)
-        .bindPopup('<b>Universidad EIA</b><br>Envigado, Antioquia')
-        .openPopup();
+  const map = L.map('map', { zoomControl: true }).setView([6.1867, -75.5849], 14);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    maxZoom: 19,
+  }).addTo(map);
+  const icon = L.divIcon({
+    html: '<div style="background:#534ab7;width:14px;height:14px;border-radius:50%;border:2px solid #afa9ec;"></div>',
+    iconSize: [14, 14], iconAnchor: [7, 7], className: ''
+  });
+  L.marker([6.1867, -75.5849], { icon })
+    .addTo(map)
+    .bindPopup('<b>Universidad EIA</b><br>Envigado, Antioquia')
+    .openPopup();
 </script>
 {% endblock %}

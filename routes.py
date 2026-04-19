@@ -15,6 +15,11 @@ RUTAS = [
 ]
 
 
+@main_bp.route("/splash")
+def splash():
+    return render_template("splash.html")
+
+
 @main_bp.route("/")
 def index():
     return render_template("login.html")

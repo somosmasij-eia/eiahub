@@ -1,46 +1,46 @@
 {% extends "base.html" %}
-{% block title %}Dashboard — EIA Hub{% endblock %}
-
+{% block title %}Dashboard — EIA Striges{% endblock %}
+ 
 {% block content %}
 <div class="page-body">
-    <p class="greeting">Hola, <strong>{{ current_user.nombre.split()[0] }}</strong> 👋</p>
-    <p class="greeting-sub">Bienvenido de vuelta</p>
-
-    <div class="cards">
-        <a href="{{ url_for('main.conoce') }}" class="card">
-            <div class="card-icon">🏛️</div>
-            <div class="card-info">
-                <div class="card-title">Conoce la U</div>
-                <div class="card-desc">Todo del campus en un solo lugar</div>
-            </div>
-            <span class="card-arrow">›</span>
-        </a>
-
-        <a href="{{ url_for('main.carpool') }}" class="card">
-            <div class="card-icon">🚗</div>
-            <div class="card-info">
-                <div class="card-title">CarPool EIA</div>
-                <div class="card-desc">Comparte viaje con compañeros</div>
-            </div>
-            <span class="card-arrow">›</span>
-        </a>
-
-        <a href="{{ url_for('main.transporte') }}" class="card">
-            <div class="card-icon">🚌</div>
-            <div class="card-info">
-                <div class="card-title">Transporte</div>
-                <div class="card-desc">Rutas y horarios del servicio</div>
-            </div>
-            <span class="card-arrow">›</span>
-        </a>
-
-        <div class="card card-disabled">
-            <div class="card-icon">✨</div>
-            <div class="card-info">
-                <div class="card-title">Próximamente</div>
-                <div class="card-desc">Algo nuevo está por llegar</div>
-            </div>
-        </div>
+  <p class="greeting">Hola, <strong>{{ current_user.nombre.split()[0] }}</strong> 👋</p>
+  <p class="greeting-sub">Bienvenido de vuelta</p>
+ 
+  <div class="cards">
+    <a href="{{ url_for('main.conoce') }}" class="card">
+      <div class="card-icon">🏛️</div>
+      <div class="card-info">
+        <div class="card-title">Conoce la U</div>
+        <div class="card-desc">Todo del campus en un solo lugar</div>
+      </div>
+      <span class="card-arrow">›</span>
+    </a>
+ 
+    <a href="{{ url_for('main.carpool') }}" class="card">
+      <div class="card-icon">🚗</div>
+      <div class="card-info">
+        <div class="card-title">CarPool EIA</div>
+        <div class="card-desc">Comparte viaje con compañeros</div>
+      </div>
+      <span class="card-arrow">›</span>
+    </a>
+ 
+    <a href="{{ url_for('main.transporte') }}" class="card">
+      <div class="card-icon">🚌</div>
+      <div class="card-info">
+        <div class="card-title">Transporte</div>
+        <div class="card-desc">Rutas y horarios del servicio</div>
+      </div>
+      <span class="card-arrow">›</span>
+    </a>
+ 
+    <div class="card card-disabled">
+      <div class="card-icon">✨</div>
+      <div class="card-info">
+        <div class="card-title">Próximamente</div>
+        <div class="card-desc">Algo nuevo está por llegar</div>
+      </div>
     </div>
+  </div>
 </div>
 {% endblock %}

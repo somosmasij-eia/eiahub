@@ -1,40 +1,78 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verificar Código - EIA Hub</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-    <div style="max-width: 400px; margin: 50px auto; text-align: center; font-family: sans-serif;">
-        <h2>Ingresa tu Código</h2>
-        <p>Enviamos un código de 6 dígitos a: <br><strong>{{ email }}</strong></p>
-
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div style="color: {% if category == 'error' %}red{% else %}green{% endif %}; margin-bottom: 15px;">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-
-        <form method="POST" action="{{ url_for('auth.verify') }}">
-            <div style="margin-bottom: 20px;">
-                <input type="text" id="codigo" name="codigo" required maxlength="6" pattern="\d{6}" 
-                       placeholder="123456" 
-                       style="text-align: center; font-size: 32px; letter-spacing: 10px; width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
-            </div>
-            <button type="submit" style="padding: 12px 24px; background-color: #003087; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; width: 100%;">
-                Verificar y Entrar
-            </button>
-        </form>
-        
-        <p style="margin-top: 20px;">
-            <a href="{{ url_for('auth.login') }}" style="color: #666; text-decoration: none;">Cambiar correo</a>
-        </p>
+{% extends "base.html" %}
+{% block title %}Verificar — EIA Striges{% endblock %}
+{% block navbar %}{% endblock %}
+ 
+{% block content %}
+<div class="auth-page">
+  <div class="auth-bg-owls" id="authOwls"></div>
+ 
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="auth-logo-name">EIA <span>Striges</span></div>
+      <div class="auth-logo-sub">Verifica tu acceso</div>
     </div>
-</body>
-</html>
+ 
+    {% for category, message in get_flashed_messages(with_categories=true) %}
+      <div class="flash flash-{{ category }}" style="width:100%;">{{ message }}</div>
+    {% endfor %}
+ 
+    <p class="auth-title">Ingresa el código de 6 dígitos</p>
+    <p class="code-email">Enviado a {{ email }}</p>
+ 
+    <form class="auth-form" method="POST" action="{{ url_for('auth.verify') }}">
+      <input class="code-input" type="text" name="codigo"
+             maxlength="6" placeholder="000000"
+             autocomplete="one-time-code" inputmode="numeric" required/>
+      <button class="auth-btn" type="submit">Verificar</button>
+    </form>
+ 
+    <p class="auth-note">El código expira en 15 minutos</p>
+    <p class="auth-note">
+      <a href="{{ url_for('main.index') }}">Volver al inicio</a>
+    </p>
+  </div>
+</div>
+{% endblock %}
+ 
+{% block scripts %}
+<script>
+  function makeOwlSVG(scale, opacity, stroke) {
+    return `<svg width="${120*scale}" height="${140*scale}" viewBox="0 0 120 140" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:${opacity}">
+      <ellipse cx="60" cy="95" rx="38" ry="42" fill="#1a1f3a" stroke="${stroke}" stroke-width="1.5"/>
+      <path d="M22 80 Q15 95 22 115 Q35 105 38 90" fill="#13172e" stroke="${stroke}" stroke-width="0.8"/>
+      <path d="M98 80 Q105 95 98 115 Q85 105 82 90" fill="#13172e" stroke="${stroke}" stroke-width="0.8"/>
+      <ellipse cx="60" cy="105" rx="22" ry="26" fill="#13172e"/>
+      <ellipse cx="60" cy="55" rx="30" ry="28" fill="#1a1f3a" stroke="${stroke}" stroke-width="1.5"/>
+      <path d="M38 32 L33 15 L42 28" fill="#1a1f3a" stroke="${stroke}" stroke-width="1.2"/>
+      <path d="M82 32 L87 15 L78 28" fill="#1a1f3a" stroke="${stroke}" stroke-width="1.2"/>
+      <ellipse cx="60" cy="57" rx="22" ry="20" fill="#13172e" stroke="${stroke}" stroke-width="1"/>
+      <circle cx="48" cy="54" r="9" fill="#0a0e1a" stroke="${stroke}" stroke-width="1.5"/>
+      <circle cx="48" cy="54" r="5" fill="${stroke}"/>
+      <circle cx="48" cy="54" r="3" fill="#0a0e1a"/>
+      <circle cx="72" cy="54" r="9" fill="#0a0e1a" stroke="${stroke}" stroke-width="1.5"/>
+      <circle cx="72" cy="54" r="5" fill="${stroke}"/>
+      <circle cx="72" cy="54" r="3" fill="#0a0e1a"/>
+      <path d="M55 63 L60 70 L65 63 Q60 60 55 63Z" fill="#afa9ec"/>
+    </svg>`;
+  }
+  const container = document.getElementById('authOwls');
+  const positions = [
+    { left:'2%',  top:'5%',  scale:0.5,  opacity:0.4,  delay:0.2, color:'#534ab7', dur:6 },
+    { left:'75%', top:'3%',  scale:0.42, opacity:0.35, delay:0.5, color:'#3c3489', dur:7 },
+    { left:'82%', top:'60%', scale:0.55, opacity:0.4,  delay:0.3, color:'#534ab7', dur:5 },
+    { left:'0%',  top:'60%', scale:0.45, opacity:0.35, delay:0.7, color:'#3c3489', dur:8 },
+    { left:'50%', top:'80%', scale:0.38, opacity:0.3,  delay:0.9, color:'#534ab7', dur:6 },
+  ];
+  positions.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'auth-bg-owl';
+    div.style.cssText = `left:${p.left};top:${p.top};animation-delay:${p.delay}s,${p.delay}s;animation-duration:1.2s,${p.dur}s;`;
+    div.innerHTML = makeOwlSVG(p.scale, p.opacity, p.color);
+    container.appendChild(div);
+  });
+ 
+  document.querySelector('.code-input').addEventListener('input', function() {
+    this.value = this.value.replace(/\D/g, '').slice(0, 6);
+  });
+</script>
+{% endblock %}

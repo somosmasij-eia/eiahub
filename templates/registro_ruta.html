@@ -1,78 +1,41 @@
 {% extends "base.html" %}
-{% block title %}Registro de Ruta — EIA Hub{% endblock %}
-
+{% block title %}Registro de Ruta — EIA Striges{% endblock %}
+ 
 {% block content %}
 <div class="page-body">
-    <div class="page-header">
-        <a href="{{ url_for('main.transporte') }}" class="back-btn">‹ Volver</a>
-        <h1>Registrarme en una ruta</h1>
+  <div class="page-header">
+    <a href="{{ url_for('main.transporte') }}" class="back-btn">‹</a>
+    <h1>Registrarme en una ruta</h1>
+  </div>
+ 
+  <form method="POST" class="form-card">
+    <div class="form-group">
+      <label for="ruta">¿Para dónde vas?</label>
+      <select id="ruta" name="ruta" required>
+        <option value="" disabled selected>Elige tu ruta</option>
+        {% for r in rutas %}
+          <option value="{{ r }}">{{ r }}</option>
+        {% endfor %}
+      </select>
     </div>
-
-    <form method="POST" class="form-card">
-        <div class="form-group">
-            <label for="ruta">¿Qué bus vas a tomar o esperar?</label>
-            <select id="ruta" name="ruta" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
-                <option value="" disabled selected>-- Elige la ruta y el horario --</option>
-                
-                <optgroup label="Clínica Las Américas - Palace">
-                    <option value="Las Américas - 4:55 a.m.">4:55 a.m.</option>
-                    <option value="Las Américas - 6:20 a.m.">6:20 a.m.</option>
-                    <option value="Las Américas - 6:30 a.m.">6:30 a.m.</option>
-                    <option value="Las Américas - 8:45 a.m.">8:45 a.m.</option>
-                    <option value="Las Américas - 12:40 p.m.">12:40 p.m.</option>
-                </optgroup>
-                
-                <optgroup label="Sofasa - Aguacatala - Bosques de Zúñiga">
-                    <option value="Sofasa - 4:55 a.m.">4:55 a.m.</option>
-                    <option value="Sofasa - 6:10 a.m.">6:10 a.m.</option>
-                    <option value="Sofasa - 6:30 a.m.">6:30 a.m.</option>
-                    <option value="Sofasa - 8:30 a.m.">8:30 a.m.</option>
-                </optgroup>
-
-                <optgroup label="Mayorca">
-                    <option value="Mayorca - 4:55 a.m.">4:55 a.m.</option>
-                    <option value="Mayorca - 6:10 a.m.">6:10 a.m.</option>
-                    <option value="Mayorca - 6:30 a.m.">6:30 a.m.</option>
-                    <option value="Mayorca - 8:40 a.m.">8:40 a.m.</option>
-                    <option value="Mayorca - 8:45 a.m.">8:45 a.m.</option>
-                </optgroup>
-
-                <optgroup label="Rionegro">
-                    <option value="Rionegro - 5:00 a.m.">5:00 a.m.</option>
-                    <option value="Rionegro - 6:20 a.m.">6:20 a.m.</option>
-                    <option value="Rionegro - 8:00 a.m.">8:00 a.m.</option>
-                    <option value="Rionegro - 10:45 a.m.">10:45 a.m.</option>
-                </optgroup>
-
-                <optgroup label="Éxito de Robledo - Palace">
-                    <option value="Robledo - 4:45 a.m.">4:45 a.m.</option>
-                    <option value="Robledo - 6:20 a.m.">6:20 a.m.</option>
-                </optgroup>
-
-                <optgroup label="Palace">
-                    <option value="Palace - 5:15 a.m. (Jueves)">5:15 a.m. (Solo Jueves)</option>
-                    <option value="Palace - 7:00 a.m. (Mar-Jue)">7:00 a.m. (Martes a Jueves)</option>
-                    <option value="Palace - 9:00 a.m.">9:00 a.m.</option>
-                </optgroup>
-
-                <optgroup label="San Antonio">
-                    <option value="San Antonio - 6:30 a.m.">6:30 a.m.</option>
-                </optgroup>
-
-                <optgroup label="Mayorca - Bosques de Zúñiga">
-                    <option value="Mayorca/Bosques - 12:30 p.m.">12:30 p.m.</option>
-                </optgroup>
-            </select>
-        </div>
-
-        <div class="check-row" style="margin-top: 15px;">
-            <input type="checkbox" id="terminos" name="terminos" required/>
-            <label for="terminos">
-                Leí y acepto los <a href="#">términos y condiciones</a> del servicio
-            </label>
-        </div>
-
-        <button type="submit" class="btn-action" style="margin-top: 20px; width: 100%; opacity: 0.9;" onclick="alert('En esta primera versión, tu registro de ruta ha sido guardado. ¡El mapa en vivo llegará en la próxima actualización!')">Listo, guardar ruta</button>
-    </form>
+ 
+    <div class="form-group">
+      <label for="horario">Horario</label>
+      <select id="horario" name="horario" required>
+        <option value="" disabled selected>Elige el horario</option>
+        <option value="Mañana">🌅 Mañana</option>
+        <option value="Tarde">🌇 Tarde</option>
+      </select>
+    </div>
+ 
+    <div class="check-row">
+      <input type="checkbox" id="terminos" name="terminos" required/>
+      <label for="terminos">
+        Leí y acepto los <a href="#">términos y condiciones</a> del servicio
+      </label>
+    </div>
+ 
+    <button type="submit" class="btn-action">Listo, guardar</button>
+  </form>
 </div>
 {% endblock %}
