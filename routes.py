@@ -14,6 +14,16 @@ RUTAS = [
     "Éxito de Robledo - Palacé",
 ]
 
+HORARIOS_POR_RUTA = {
+    "San Antonio": ["4:05 p.m.", "5:05 p.m."],
+    "Sofasa - Aguacatala - Zuñiga": ["4:05 p.m.", "6:10 p.m."],
+    "Rionegro": ["12:30 p.m.", "4:05 p.m.", "5:05 p.m.", "6:10 p.m.", "8:00 p.m."],
+    "Mayorca": ["4:05 p.m.", "5:05 p.m.", "6:10 p.m."],
+    "Palacé": ["4:10 p.m.", "6:10 p.m."],
+    "Clínica Las Américas - Palacé": ["12:30 p.m.", "4:05 p.m.", "5:05 p.m.", "6:10 p.m.", "8:00 p.m."],
+    "Éxito de Robledo - Palacé": ["4:10 p.m.", "6:10 p.m."],
+}
+
 
 @main_bp.route("/splash")
 def splash():
@@ -62,12 +72,12 @@ def registro_ruta():
             flash("Debes aceptar los términos.", "error")
         elif ruta not in RUTAS:
             flash("Ruta inválida.", "error")
-        elif horario not in ("Mañana", "Tarde"):
-            flash("Horario inválido.", "error")
+        elif horario not in HORARIOS_POR_RUTA.get(ruta, []):
+            flash("Horario inválido para la ruta seleccionada.", "error")
         else:
             db.session.add(RegistroRuta(user_id=current_user.id, ruta=ruta, horario=horario))
             db.session.commit()
             flash(f"Registrado en {ruta} — {horario}.", "success")
             return redirect(url_for("main.transporte"))
 
-    return render_template("registro_ruta.html", rutas=RUTAS)
+    return render_template("registro_ruta.html", rutas=RUTAS, horarios_por_ruta=HORARIOS_POR_RUTA)

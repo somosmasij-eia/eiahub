@@ -21,11 +21,10 @@
  
     <div class="form-group">
       <label for="horario">Horario</label>
-      <select id="horario" name="horario" required>
-        <option value="" disabled selected>Elige el horario</option>
-        <option value="Mañana">🌅 Mañana</option>
-        <option value="Tarde">🌇 Tarde</option>
-      </select>
+      <input type="hidden" id="horario" name="horario" value="" />
+      <div id="horario-buttons" class="choice-grid">
+        <div class="choice-empty">Selecciona una ruta para ver horarios.</div>
+      </div>
     </div>
  
     <div class="check-row">
@@ -35,7 +34,74 @@
       </label>
     </div>
  
-    <button type="submit" class="btn-action">Listo, guardar</button>
+    <button type="submit" class="btn-action" disabled>Listo, guardar</button>
   </form>
 </div>
+
+<script>
+  const horariosPorRuta = {{ (horarios_por_ruta or {}) | tojson }};
+  const rutaSelect = document.getElementById("ruta");
+  const horarioHidden = document.getElementById("horario");
+  const horarioButtons = document.getElementById("horario-buttons");
+  const submitBtn = document.querySelector("button[type='submit']");
+
+  function setEmpty(message) {
+    horarioButtons.innerHTML = "";
+    const div = document.createElement("div");
+    div.className = "choice-empty";
+    div.textContent = message;
+    horarioButtons.appendChild(div);
+  }
+
+  function resetHorario(message) {
+    horarioHidden.value = "";
+    submitBtn.disabled = true;
+    setEmpty(message);
+  }
+
+  function renderHorarios(ruta) {
+    const horarios = horariosPorRuta[ruta] || [];
+    horarioHidden.value = "";
+    submitBtn.disabled = true;
+    horarioButtons.innerHTML = "";
+
+    if (!horarios.length) {
+      setEmpty("No hay horarios configurados para esta ruta.");
+      return;
+    }
+
+    horarios.forEach((h, i) => {
+      const id = `horario_opt_${i}`;
+      const input = document.createElement("input");
+      input.type = "radio";
+      input.id = id;
+      input.name = "horario_opt";
+      input.value = h;
+      input.className = "choice-input";
+      input.addEventListener("change", () => {
+        horarioHidden.value = h;
+        submitBtn.disabled = false;
+      });
+
+      const label = document.createElement("label");
+      label.htmlFor = id;
+      label.className = "choice-btn";
+      label.textContent = h;
+
+      horarioButtons.appendChild(input);
+      horarioButtons.appendChild(label);
+    });
+  }
+
+  rutaSelect.addEventListener("change", () => {
+    const ruta = rutaSelect.value;
+    if (!ruta) {
+      resetHorario("Selecciona una ruta para ver horarios.");
+      return;
+    }
+    renderHorarios(ruta);
+  });
+
+  resetHorario("Selecciona una ruta para ver horarios.");
+</script>
 {% endblock %}
